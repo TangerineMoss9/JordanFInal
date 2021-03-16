@@ -21,7 +21,7 @@
     <div id="container">
         <h1>Players</h1>
 
-    
+
         <div id=signInDiv>
             <span id="err"
                 style="color: red; font-family: Arial, Helvetica, sans-serif; font-size: x-small;"></span><br>
@@ -32,33 +32,33 @@
         </div>
 
         <div id="listDiv" style="display: none;">
-        <nav>
-            <a href="Top10.html">Top 10</a>
-        </nav>
+            <nav>
+                <a href="Top10.html">Top 10</a>
+            </nav>
         </div>
 
         <div id="editDiv" style="display: none;">
 
-            <form action="/editPlayer" method="POST" >
+            <form action="/editPlayer" method="POST">
                 <span id="err" style="color: red;"></span>
                 <br>
                 <Label for="_id"> Player ID:</Label>
-                <input id = "pId" type="text" placeholder="pId" name="_id"> 
+                <input id="pId" type="text" placeholder="pId" name="_id">
                 <br>
                 <Label for="pName"> Player Name:</Label>
-                <input id = "pName" type="text" placeholder="pName" name="pName">
+                <input id="pName" type="text" placeholder="pName" name="pName">
                 <br>
                 <Label for="HighScore"> HighScore:</Label>
-                <input id = "HighScore" type="text" placeholder="HighScore" name="HighScore">
+                <input id="HighScore" type="text" placeholder="HighScore" name="HighScore">
                 <br>
                 <Label for="WL"> Win/Loss:</Label>
-                <input id = "WL" type="text" placeholder="WL" name="WL">
+                <input id="WL" type="text" placeholder="WL" name="WL">
                 <br>
                 <Label for="KDA"> K/D/A:</Label>
-                <input id = "KDA" type="text" placeholder="KDA" name="KDA">
+                <input id="KDA" type="text" placeholder="KDA" name="KDA">
                 <br>
                 <Label for="Wins"> Wins:</Label>
-                <input id = "Wins" type="text" placeholder="Wins" name="Wins">
+                <input id="Wins" type="text" placeholder="Wins" name="Wins">
                 <br>
                 <button type="submit">Submit</button>
             </form>
@@ -68,7 +68,7 @@
         <script>
             var socket = io()
             displayData()
-            
+
 
 
             var signDiv = document.getElementById('signInDiv')
@@ -82,9 +82,9 @@
 
             //add event listeners for sign in buttons
             signDivSignIn.onclick = function () {
-                listDiv.style.display = "inline-block"
-                signDiv.style.display = "none"
-                //socket.emit('signIn', { username: signDivUsername.value, password: signDivPassword.value })
+                //listDiv.style.display = "inline-block"
+                //signDiv.style.display = "none"
+                socket.emit('signIn', { username: signDivUsername.value, password: signDivPassword.value })
             }
 
 
@@ -101,7 +101,7 @@
 
             })
 
-            function setID(tempID,pName,HighScore,WL,KDA,Wins){
+            function setID(tempID, pName, HighScore, WL, KDA, Wins) {
                 document.getElementById('pId').value = tempID;
                 document.getElementById('pName').value = pName;
                 document.getElementById('HighScore').value = HighScore;
@@ -120,7 +120,7 @@
                             playerElement.innerHTML = "Player Name: " + player.pName +
                                 "<br> HighScore: " + player.HighScore +
                                 "<br> Win/Loss: " + player.WL +
-                                "<br> KDA: " + player.KDA + 
+                                "<br> KDA: " + player.KDA +
                                 "<br> Wins: " + player.Wins + "<br>"
                             document.getElementById('listDiv').appendChild(playerElement)
 
@@ -153,9 +153,9 @@
                                 listDiv.style.display = "none"
                                 editDiv.style.display = "inline-block"
                                 tempID = player._id
-                                console.log(tempID)                                 
-                                setID(player._id,player.pName,player.HighScore,player.WL,player.KDA,player.Wins)                         
-                             })
+                                console.log(tempID)
+                                setID(player._id, player.pName, player.HighScore, player.WL, player.KDA, player.Wins)
+                            })
 
 
 

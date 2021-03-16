@@ -14,13 +14,7 @@ app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({ extended: true }))
 app.use(express.json())
 
-/*  mongoose.createConnection('mongodb://localhost:27017/Players', {
-     useNewUrlParser: true
- }).then(function () {
-     console.log("Connected to admin data base")
- }) */
 
-//mongoose.connection.close()
 
 mongoose.connect('mongodb://localhost:27017/serverPlayers', {
     useNewUrlParser: true
@@ -31,11 +25,13 @@ mongoose.connect('mongodb://localhost:27017/serverPlayers', {
 
 require('./models/player')
 var Player = mongoose.model('player')
-require('./models/admin')
-var PlayerData = mongoose.model('admin')
 
 
 
+var admin = {
+    username: "Zach",
+    password: "123"
+}
 
 
 
@@ -46,18 +42,18 @@ app.get('/getPlayer', function (req, res) {
         })
     }
     catch (e) {
-        
+
     }
 })
 
 app.get('/getPlayerFor10', function (req, res) {
     try {
-        Player.find({}).sort({Wins: "desc"}).exec().then(function (player) {
+        Player.find({}).sort({ Wins: "desc" }).exec().then(function (player) {
             res.json({ player })
         })
     }
     catch (e) {
-        
+
     }
 })
 
@@ -70,12 +66,12 @@ app.post('/deletePlayer', function (req, res) {
 
 app.post('/editPlayer', function (req, res) {
 
-    Player.findByIdAndUpdate(  { _id: req.body._id },{ pName: req.body.pName }).exec()
-    Player.findByIdAndUpdate(  { _id: req.body._id },{ HighScore: req.body.HighScore } ).exec()
-    Player.findByIdAndUpdate(  { _id: req.body._id },{ WL: req.body.WL }).exec()
-    Player.findByIdAndUpdate(  { _id: req.body._id },{ KDA: req.body.KDA }).exec()
-    Player.findByIdAndUpdate(  { _id: req.body._id },{ Wins: req.body.Wins}).exec().then(function () {
-        
+    Player.findByIdAndUpdate({ _id: req.body._id }, { pName: req.body.pName }).exec()
+    Player.findByIdAndUpdate({ _id: req.body._id }, { HighScore: req.body.HighScore }).exec()
+    Player.findByIdAndUpdate({ _id: req.body._id }, { WL: req.body.WL }).exec()
+    Player.findByIdAndUpdate({ _id: req.body._id }, { KDA: req.body.KDA }).exec()
+    Player.findByIdAndUpdate({ _id: req.body._id }, { Wins: req.body.Wins }).exec().then(function () {
+
         res.redirect('index.html')
     })
 })
@@ -100,24 +96,15 @@ io.sockets.on('connection', function (socket) {
     console.log("Socket Connected")
     socket.on('signIn', function (data) {
 
-        isPasswordValid(data, function (res) {
-            if (res) {
-                Player.onConnect(socket)
-                socket.emit('connected', socket.id)
-                mongoose.connection.close();
-                mongoose.connect('mongodb://localhost:27017/serverPlayers', {
-                    useNewUrlParser: true
-                }).then(function () {
-                    console.log("Connected to mongoDB Database")
-                }).catch(function (err) {
-                    console.log("error")
-                })
+        if (data.username == admin.username && data.password == admin.password) {
+            
+            console.log("correct password")
+            socket.emit('signInResponse', { success: true })
+        } else {
+            console.log("wrong password")
+            socket.emit('signInResponse', { success: false })
+        }
 
-                socket.emit('signInResponse', { success: true })
-            } else {
-                socket.emit('signInResponse', { success: false })
-            }
-        })
     })
 })
 
