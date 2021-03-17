@@ -8,33 +8,48 @@ var mongoose = require('mongoose')
 
 require('./db')
 
-var User = mongoose.model('User',{
-    playername:{
+var Player = mongoose.model('player',{
+    pName:{
         type:String
     },
-    score:{
+    HighScore:{
         type:Number
+    },
+    KDA:{
+        type:Number,
+        required:true
+    },
+    WL:{
+        type:Number,
+        required:true
+    },
+    Wins:{
+        type:Number,
+        required:true
     }
 })
 
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
-app.get('/download/id',function(req,res){
-    User.find({id:playername}).then(function(user){
-        res.json({user})
+app.get('/download',function(req,res){
+    Player.find({}).sort({ Wins: "desc" }).then(function(data){
+        res.json({data})
     })
 })
 
 //post route to save sate from unity
 app.post('/upload', function(req,res){
     console.log("Posting data")
-    var newUser = new User({
-        playername:req.body.playername,
-        score:req.body.score
+    var newPlayer = new Player({
+        pName:req.body.pName,
+        HighScore:req.body.HighScore,
+        KDA:req.body.KDA,
+        WL:req.body.WL,
+        Wins:req.body.Wins
     })
 
-    newUser.save(function(err,result){
+    newPlayer.save(function(err,result){
         if(err){
             console.log(err)
         }else{

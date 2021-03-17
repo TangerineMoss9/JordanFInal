@@ -112,6 +112,6 @@ io.sockets.on('connection', function (socket) {
 
 app.use(express.static(__dirname + "/views"))
 
-serv.listen(3000, function () {
-    console.log("Listening on port 3000")
+serv.listen(2000, function () {
+    console.log("Listening on port 2000")
 })

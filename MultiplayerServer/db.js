@@ -1,5 +1,5 @@
 var mongoose = require('mongoose')
-var dbURI = 'mongodb://localhost:27017/UnityData'
+var dbURI = 'mongodb://localhost:27017/serverPlayers'
 
 if(process.env.NODE_ENV === 'production'){
     dbURI = dbURI
