@@ -33,6 +33,12 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
 app.get('/download',function(req,res){
+    Player.find({}).then(function(data){
+        res.json({data})
+    })
+})
+
+app.get('/downloadTen',function(req,res){
     Player.find({}).sort({ Wins: "desc" }).then(function(data){
         res.json({data})
     })
